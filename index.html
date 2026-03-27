@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>모바일 청첩장</title>
+  <style>
+    :root {
+      --bg: #f8f4ef;
+      --card: rgba(255,255,255,0.82);
+      --text: #3d342f;
+      --sub: #7a6b63;
+      --line: rgba(100, 80, 70, 0.15);
+      --accent: #b88b7a;
+      --accent-soft: #ead8cf;
+      --shadow: 0 18px 45px rgba(73, 49, 39, 0.12);
+      --radius: 26px;
+      --max: 460px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, #fff7f2 0%, transparent 38%),
+        radial-gradient(circle at bottom right, #f1e3db 0%, transparent 32%),
+        var(--bg);
+      line-height: 1.65;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .wrap {
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 20px 16px 48px;
+    }
+
+    .section {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.65);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .hero {
+      min-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      padding: 24px 24px 32px;
+      background:
+        linear-gradient(to bottom, rgba(255,255,255,0.28), rgba(255,255,255,0.82)),
+        url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80') center/cover;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(248,244,239,0.65), rgba(255,255,255,0.08));
+      pointer-events: none;
+    }
+
+    .hero > * { position: relative; z-index: 1; }
+
+    .top-badge {
+      align-self: center;
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--sub);
+      background: rgba(255,255,255,0.75);
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+
+    .hero-center {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .kicker {
+      font-size: 14px;
+      color: var(--sub);
+      margin-bottom: 12px;
+      letter-spacing: 0.12em;
+    }
+
+    .title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(34px, 9vw, 52px);
+      line-height: 1.15;
+      margin: 0;
+      font-weight: 500;
+      color: #4b3b33;
+    }
+
+    .names {
+      margin-top: 18px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .date-box {
+      text-align: center;
+      background: rgba(255,255,255,0.76);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 22px;
+      padding: 16px;
+    }
+
+    .date-main {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .date-sub {
+      font-size: 14px;
+      color: var(--sub);
+    }
+
+    .content {
+      padding: 28px 22px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .section-title .en {
+      font-size: 12px;
+      color: var(--sub);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .section-title h2 {
+      margin: 8px 0 0;
+      font-size: 24px;
+    }
+
+    .message {
+      text-align: center;
+      color: #564942;
+      font-size: 16px;
+      white-space: pre-line;
+    }
+
+    .divider {
+      width: 54px;
+      height: 1px;
+      background: var(--line);
+      margin: 18px auto;
+    }
+
+    .family-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .family-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      text-align: center;
+      background: rgba(255,255,255,0.55);
+    }
+
+    .family-label {
+      font-size: 13px;
+      color: var(--sub);
+      margin-bottom: 8px;
+    }
+
+    .family-name {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .info-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .info-item {
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.58);
+      border: 1px solid var(--line);
+      align-items: start;
+    }
+
+    .info-item b {
+      color: #5b4940;
+    }
+
+    .map-box {
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #f2ebe6;
+    }
+
+    .map-placeholder {
+      aspect-ratio: 16/10;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      color: var(--sub);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.05)),
+        repeating-linear-gradient(45deg, #ede4de 0 14px, #f6f0ec 14px 28px);
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(80, 50, 30, 0.06);
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: white;
+      border-color: transparent;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .gallery img {
+      width: 100%;
+      aspect-ratio: 1/1.15;
+      object-fit: cover;
+      display: block;
+      border-radius: 18px;
+    }
+
+    .account-box {
+      display: grid;
+      gap: 10px;
+    }
+
+    .account-item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,0.58);
+    }
+
+    .account-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .account-title {
+      font-weight: 800;
+    }
+
+    .copy-btn {
+      border: none;
+      background: var(--accent-soft);
+      color: #6a5044;
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--sub);
+      font-size: 13px;
+      padding: 10px 4px 20px;
+    }
+
+    .sticky-nav {
+      position: sticky;
+      bottom: 14px;
+      z-index: 30;
+      padding-top: 4px;
+    }
+
+    .sticky-inner {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(255,255,255,0.75);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 18px 40px rgba(75, 55, 44, 0.14);
+      border-radius: 22px;
+      padding: 10px;
+    }
+
+    .nav-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 44px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #6a5a52;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .nav-btn:hover { background: rgba(184,139,122,0.12); }
+
+    @media (min-width: 700px) {
+      .wrap { padding-top: 28px; }
+      .hero { min-height: 840px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="section hero" id="home">
+      <div class="top-badge">Wedding Invitation</div>
+
+      <div class="hero-center">
+        <div class="kicker">서로의 계절이 만나, 하나의 봄이 됩니다</div>
+        <h1 class="title">Our Wedding</h1>
+        <div class="names">박익현 · 공혜린</div>
+      </div>
+
+      <div class="date-box">
+        <div class="date-main">2026. 10. 18 일요일 오후 1시 30분</div>
+        <div class="date-sub">라움아트센터 2층 그레이스홀</div>
+      </div>
+    </section>
+
+    <section class="section" id="invitation">
+      <div class="content">
+        <div class="section-title">
+          <div class="en">Invitation</div>
+          <h2>소중한 분들을 초대합니다</h2>
+        </div>
+        <div class="divider"></div>
+        <div class="message">오랜 시간 서로를 아끼며 걸어온 두 사람이
+이제 같은 곳을 바라보며 함께 걸어가고자 합니다.
+
+기쁜 날, 귀한 걸음으로 함께해 주셔서
+저희의 시작을 축복해 주시면 감사하겠습니다.</div>
+
+        <div class="family-grid">
+          <div class="family-card">
+            <div class="family-label">신랑측 혼주</div>
+            <div class="family-name">박영수 · 김지은</div>
+          </div>
+          <div class="family-card">
+            <div class="family-label">신부측 혼주</div>
+            <div class="family-name">공정호 · 최수진</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="info">
+      <div class="content">
+        <div class="section-title">
+          <div class="en">Information</div>
+          <h2>예식 안내</h2>
+        </div>
+        <div class="info-list">
+          <div class="info-item">
+            <b>일시</b>
+            <div>2026년 4월 18일 토요일<br>오후 1시 30분</div>
+          </div>
+          <div class="info-item">
+            <b>장소</b>
+            <div>라움아트센터 2층 그레이스홀<br>서울 강남구 언주로 564</div>
+          </div>
+          <div class="info-item">
+            <b>연락처</b>
+            <div>신랑 010-1234-5678<br>신부 010-9876-5432</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="location">
+      <div class="content">
+        <div class="section-title">
+          <div class="en">Location</div>
+          <h2>오시는 길</h2>
+        </div>
+
+        <div class="map-box">
+          <div class="map-placeholder">지도 영역
+            <br>카카오맵 / 네이버지도 iframe으로 교체 가능</div>
+        </div>
+
+        <div class="button-row">
+          <button class="btn primary" onclick="alert('지도 앱 링크로 연결되도록 바꿀 수 있어요.')">지도 보기</button>
+          <button class="btn" onclick="copyText('서울 강남구 언주로 564')">주소 복사</button>
+        </div>
+
+        <div class="info-list" style="margin-top:14px;">
+          <div class="info-item">
+            <b>지하철</b>
+            <div>2호선 문현역 4번 출구 도보 8분</div>
+          </div>
+          <div class="info-item">
+            <b>주차</b>
+            <div>건물 내 주차 2시간 지원<br>만차 시 인근 제휴주차장 이용</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="gallery">
+      <div class="content">
+        <div class="section-title">
+          <div class="en">Gallery</div>
+          <h2>우리의 순간</h2>
+        </div>
+        <div class="gallery">
+          <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80" alt="gallery1">
+          <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80" alt="gallery2">
+          <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=900&q=80" alt="gallery3">
+          <img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=900&q=80" alt="gallery4">
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="account">
+      <div class="content">
+        <div class="section-title">
+          <div class="en">Account</div>
+          <h2>마음 전하실 곳</h2>
+        </div>
+
+        <div class="account-box">
+          <div class="account-item">
+            <div class="account-top">
+              <div class="account-title">신랑측 계좌</div>
+              <button class="copy-btn" onclick="copyText('국민은행 123456-78-123456 김민준')">복사</button>
+            </div>
+            <div>국민은행 123456-78-123456 박익현</div>
+          </div>
+
+          <div class="account-item">
+            <div class="account-top">
+              <div class="account-title">신부측 계좌</div>
+              <button class="copy-btn" onclick="copyText('신한은행 110-456-789012 이서연')">복사</button>
+            </div>
+            <div>신한은행 110-456-789012 공혜린</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="sticky-nav">
+      <div class="sticky-inner">
+        <button class="nav-btn" onclick="moveToSection('home')">홈</button>
+        <button class="nav-btn" onclick="moveToSection('info')">예식</button>
+        <button class="nav-btn" onclick="moveToSection('location')">오시는 길</button>
+        <button class="nav-btn" onclick="moveToSection('account')">계좌</button>
+      </div>
+    </div>
+
+    <div class="footer">박익현 · 공혜린의 모바일 청첩장 예시</div>
+  </div>
+
+  <script>
+    function moveToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        alert('복사되었습니다.');
+      } catch (e) {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+        alert('복사되었습니다.');
+      }
+    }
+  </script>
+</body>
+</html>
